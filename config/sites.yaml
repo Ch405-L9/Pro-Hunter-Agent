@@ -1,0 +1,36 @@
+sites:
+  linkedin:
+    name: "LinkedIn Jobs"
+    search_url: "https://www.linkedin.com/jobs/search/?keywords={keywords}&location={location}&f_WT=2"
+    strategy_tiers: ["local", "firecrawl_cloud", "browseruse"]
+
+  indeed:
+    name: "Indeed"
+    search_url: "https://www.indeed.com/jobs?q={keywords}&l={location}&remotejob=032b3046-06a3-4876-8dfd-474eb5e7ed11"
+    strategy_tiers: ["local", "firecrawl_self_hosted", "firecrawl_cloud"]
+
+  wellfound:
+    name: "Wellfound (AngelList)"
+    search_url: "https://wellfound.com/jobs?q={keywords}&remote=true"
+    strategy_tiers: ["browseruse", "firecrawl_cloud", "agenty"]
+
+  dice:
+    name: "Dice"
+    search_url: "https://www.dice.com/jobs?q={keywords}&radius=30&radiusUnit=mi&page=1&pageSize=20&filters.postedDate=ONE&filters.workplaceTypes=Remote&language=en"
+    strategy_tiers: ["local", "firecrawl_self_hosted"]
+
+  sam_gov:
+    name: "SAM.gov (Federal Contracts)"
+    search_url: "https://sam.gov/opportunities/results?keywords={keywords}&sort=-relevance&mode=&is_active=true&page=1"
+    strategy_tiers: ["firecrawl_cloud", "browseruse"]
+    notes: "Federal contract opportunities — use federal-contracts skill profile"
+
+  usajobs:
+    name: "USAJobs"
+    search_url: "https://www.usajobs.gov/search/results/?k={keywords}&p=1"
+    strategy_tiers: ["local", "firecrawl_self_hosted", "firecrawl_cloud"]
+
+  remote_ok:
+    name: "RemoteOK"
+    search_url: "https://remoteok.com/remote-{keywords}-jobs"
+    strategy_tiers: ["local", "firecrawl_self_hosted"]

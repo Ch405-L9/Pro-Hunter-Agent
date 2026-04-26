@@ -1,0 +1,23 @@
+providers:
+  strategy_order: ["local", "firecrawl_self_hosted", "firecrawl_cloud", "browseruse", "agenty"]
+
+  firecrawl:
+    self_hosted_url: "http://localhost:3002"
+    api_key: "${FIRECRAWL_API_KEY}"
+
+  agenty:
+    api_key: "${AGENTY_API_KEY}"
+
+  llm:
+    model: "qwen2.5:14b"
+    browseruse_model: "qwen2.5:14b"
+    embed_model: "nomic-embed-text"
+    base_url: "http://localhost:11434"
+
+  quotas:
+    firecrawl_cloud:
+      daily_calls: 100
+      monthly_calls: 2000
+    agenty:
+      daily_calls: 50
+      monthly_calls: 1000

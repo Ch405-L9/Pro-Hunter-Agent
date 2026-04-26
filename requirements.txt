@@ -1,0 +1,13 @@
+playwright
+httpx
+pyyaml
+browser-use
+langchain-ollama
+langchain-openai
+langchain-community
+beautifulsoup4
+pandas
+chromadb
+pdfplumber
+openai
+requests
