@@ -11,3 +11,4 @@ data/test_jobs.csv
 logs/*.log
 rag_db/
 .pytest_cache/
+config/identity.yaml

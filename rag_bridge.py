@@ -54,12 +54,12 @@ async def push_job_to_rag(job: JobOpportunity, fit: JobFitScore = None):
 
         embedding = _embed(doc_text)
         metadata = {
-            "job_id": job.job_id,
-            "job_title": job.job_title,
-            "company": job.company_name,
-            "source_site": job.source_site,
+            "job_id": job.job_id or "",
+            "job_title": job.job_title or "",
+            "company": job.company_name or "",
+            "source_site": job.source_site or "",
             "location_type": job.location_type or "",
-            "tech_stack": "|".join(job.tech_stack),
+            "tech_stack": "|".join(job.tech_stack or []),
             "fit_score": str(fit.fit_score_overall) if fit else "0",
             "skill_profile": fit.skill_profile if fit else "",
         }

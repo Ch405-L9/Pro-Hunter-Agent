@@ -35,7 +35,7 @@ class JobParser:
 
     async def _parse_with_llm(self, content: str, source_site: str, url: str) -> JobOpportunity:
         # Feed up to 6000 chars — more context = better extraction
-        snippet = content[:6000]
+        snippet = content[:2000]
         prompt = f"""Extract job details from the content below. Return ONLY valid JSON.
 
 Fields to extract:

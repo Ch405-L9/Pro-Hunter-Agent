@@ -1,164 +1,279 @@
 skill_profiles:
+
+  # PRIMARY — matches current role and strongest differentiator
+  ai-sw-engineer:
+    name: "AI Software Engineer & Developer"
+    title_keywords:
+      - "AI Software Engineer"
+      - "AI Developer"
+      - "ML Engineer"
+      - "LLM Engineer"
+      - "AI/ML Developer"
+      - "Machine Learning Engineer"
+      - "AI Systems Engineer"
+    keywords:
+      - "LLM integration"
+      - "prompt engineering"
+      - "AI automation"
+      - "machine learning"
+      - "Python AI"
+      - "NLP"
+      - "vector database"
+      - "fine-tuning"
+      - "data pipeline"
+      - "AI developer"
+    must_have:
+      - "Python"
+      - "LLM or AI or ML or machine learning"
+      - "automation or pipeline or NLP or prompt"
+    nice_to_have:
+      - "LangChain or LlamaIndex or Ollama or OpenAI"
+      - "vector database or ChromaDB or Pinecone"
+      - "fine-tuning or RAG or embeddings"
+      - "FastAPI or Flask or Node.js"
+      - "AWS or Azure or cloud"
+      - "Docker or Kubernetes"
+    location_preference: "remote"
+    employment_types: ["full-time", "contract", "part-time"]
+    min_salary: 85000
+    rate_min_hourly: 45
+
   python-automation:
     name: "Python Automation Engineer"
+    title_keywords:
+      - "Python Developer"
+      - "Python Engineer"
+      - "Automation Engineer"
+      - "Backend Developer Python"
+      - "Software Engineer Python"
     keywords:
       - "Python automation"
+      - "data pipeline"
       - "scripting"
-      - "web scraping"
-      - "API integration"
-      - "task automation"
+      - "ETL"
       - "workflow automation"
-      - "Playwright"
-      - "Selenium"
+      - "Python developer"
     must_have:
-      - "Python 3.10+"
-      - "web scraping (BeautifulSoup, Scrapy, or Playwright)"
-      - "REST API integration"
-      - "Linux/Ubuntu experience"
+      - "Python"
+      - "automation or pipeline or scripting or ETL"
     nice_to_have:
-      - "Docker"
-      - "Ollama or local LLMs"
-      - "CI/CD pipelines"
-      - "n8n or similar workflow tools"
-    location_preference: remote_only
+      - "FastAPI or Flask or Django"
+      - "Docker or Kubernetes"
+      - "AWS Lambda or cloud functions"
+      - "CI/CD or Jenkins or GitHub Actions"
+      - "PostgreSQL or MongoDB or SQLAlchemy"
+    location_preference: "remote"
+    employment_types: ["full-time", "contract"]
+    min_salary: 80000
+    rate_min_hourly: 40
 
-  ai-systems:
-    name: "Senior AI Systems Engineer"
+  full-stack-dev:
+    name: "Full Stack Developer"
+    title_keywords:
+      - "Full Stack Developer"
+      - "Full Stack Engineer"
+      - "JavaScript Developer"
+      - "TypeScript Developer"
+      - "React Developer"
+      - "Node.js Developer"
     keywords:
-      - "AI systems engineer"
-      - "LLM integration"
-      - "MLOps"
-      - "machine learning infrastructure"
-      - "AI pipeline"
-      - "model serving"
-      - "Ollama"
-    must_have:
-      - "LLM deployment and integration"
-      - "Python and system design"
-      - "Linux/Ubuntu production environment"
-    nice_to_have:
-      - "Federal contracts or government AI experience"
-      - "RAG / vector database implementation"
-      - "Multi-agent orchestration"
-    location_preference: remote_only
-
-  federal-contracts:
-    name: "Federal Contracts / Government AI Consultant"
-    keywords:
-      - "federal contractor"
-      - "SAM.gov"
-      - "government procurement"
-      - "8(a) small business"
-      - "SBA programs"
-      - "SBIR STTR"
-      - "UEI CAGE"
-      - "GSA schedule"
-    must_have:
-      - "UEI/SAM.gov registered entity"
-      - "experience with federal RFP/RFQ process"
-      - "AI or technology services for government"
-    nice_to_have:
-      - "8(a) BD/ED or similar certification"
-      - "GSA schedule holder or pursuing"
-      - "clearance or clearance-eligible"
-    location_preference: hybrid_preferred
-
-  web-dev:
-    name: "Full-Stack Web Developer"
-    keywords:
+      - "JavaScript"
+      - "TypeScript"
       - "React"
-      - "TypeScript"
       - "Node.js"
-      - "full-stack developer"
-      - "Next.js"
-      - "REST API"
-      - "frontend developer"
+      - "full stack"
+      - "web developer"
     must_have:
-      - "React or Next.js"
-      - "TypeScript"
-      - "REST API design and consumption"
+      - "JavaScript or TypeScript"
+      - "React or Node.js or full stack"
     nice_to_have:
-      - "AI/LLM integration in web apps"
-      - "Tailwind CSS"
-      - "PostgreSQL or Supabase"
-    location_preference: remote_only
+      - "Python backend"
+      - "REST API or GraphQL"
+      - "Docker or CI/CD"
+      - "AWS or Azure or cloud"
+      - "PostgreSQL or MongoDB"
+    location_preference: "remote"
+    employment_types: ["full-time", "contract"]
+    min_salary: 80000
+    rate_min_hourly: 40
 
   ai-agents:
-    name: "AI Agent Developer"
+    name: "AI Agent & LLM Orchestration Engineer"
+    title_keywords:
+      - "AI Agent Developer"
+      - "LLM Application Developer"
+      - "AI Automation Engineer"
+      - "Conversational AI Developer"
+      - "AI Platform Engineer"
     keywords:
-      - "AI agents"
-      - "LangChain"
-      - "CrewAI"
-      - "multi-agent systems"
-      - "RAG"
-      - "vector database"
+      - "AI agent"
       - "LLM orchestration"
-      - "agentic workflows"
+      - "autonomous agent"
+      - "LangChain"
+      - "prompt chaining"
+      - "multi-agent"
+      - "Ollama"
+      - "OpenAI API"
     must_have:
-      - "multi-agent framework experience (LangChain, CrewAI, AutoGen)"
-      - "RAG implementation with vector DBs (ChromaDB, Qdrant, Weaviate)"
-      - "strong Python"
+      - "LLM or agent or AI"
+      - "Python"
+      - "prompt engineering or orchestration or chaining"
     nice_to_have:
-      - "MCP (Model Context Protocol) server development"
-      - "local model deployment with Ollama"
-      - "n8n or workflow orchestration"
-    location_preference: remote_only
+      - "LangChain or LlamaIndex or CrewAI"
+      - "RAG or vector database or embeddings"
+      - "OpenAI or Anthropic or Ollama"
+      - "FastAPI or REST API"
+      - "Docker or cloud deployment"
+    location_preference: "remote"
+    employment_types: ["full-time", "contract"]
+    min_salary: 90000
+    rate_min_hourly: 50
 
   devops-mlops:
-    name: "DevOps / MLOps Engineer"
+    name: "DevOps & MLOps Engineer"
+    title_keywords:
+      - "DevOps Engineer"
+      - "MLOps Engineer"
+      - "Platform Engineer"
+      - "Site Reliability Engineer"
+      - "Cloud Engineer"
     keywords:
       - "DevOps"
       - "MLOps"
       - "Docker"
-      - "CI/CD"
       - "Kubernetes"
-      - "model deployment"
-      - "Linux sysadmin"
+      - "CI/CD"
+      - "Jenkins"
+      - "AWS"
+      - "Linux"
     must_have:
-      - "Docker and container orchestration"
-      - "CI/CD pipeline design (GitHub Actions, GitLab CI)"
-      - "Linux server administration"
+      - "Docker or Kubernetes or container"
+      - "CI/CD or Jenkins or GitHub Actions or pipeline"
+      - "Linux or AWS or Azure or cloud"
     nice_to_have:
-      - "MLflow or similar model tracking"
-      - "Ollama / local LLM hosting"
-      - "Prometheus/Grafana observability"
-    location_preference: remote_only
+      - "Python scripting"
+      - "Terraform or Ansible or IaC"
+      - "monitoring or Prometheus or Grafana"
+      - "MLflow or model registry or ML pipeline"
+      - "Helm or ArgoCD"
+    location_preference: "remote"
+    employment_types: ["full-time", "contract"]
+    min_salary: 85000
+    rate_min_hourly: 45
 
-  content-tech:
-    name: "AI Content Systems Engineer"
+  field-support-engineer:
+    name: "Field Support Hardware Engineer"
+    title_keywords:
+      - "Field Support Engineer"
+      - "Hardware Engineer"
+      - "Field Service Engineer"
+      - "Systems Integration Engineer"
+      - "Deployment Engineer"
     keywords:
-      - "AI content"
-      - "technical writing"
-      - "content automation"
-      - "social media automation"
-      - "LLM content generation"
-      - "prompt engineering"
+      - "field support"
+      - "hardware engineer"
+      - "Linux Windows"
+      - "deployment"
+      - "AI inspection"
+      - "computer vision"
     must_have:
-      - "LLM-driven content pipeline experience"
-      - "strong technical writing"
-      - "Python scripting for automation"
+      - "Linux or Windows systems"
+      - "field support or deployment or hardware"
     nice_to_have:
-      - "n8n or Make.com workflows"
-      - "brand voice enforcement systems"
-      - "multi-platform publishing automation"
-    location_preference: remote_only
+      - "computer vision or AI or ML"
+      - "network configuration or firewall or VPN"
+      - "Python scripting or automation"
+      - "SLA or uptime or enterprise support"
+      - "Docker or embedded systems"
+    location_preference: "hybrid"
+    employment_types: ["full-time"]
+    min_salary: 75000
+    rate_min_hourly: 38
 
-  data-engineering:
-    name: "Data Engineer"
+  tech-support:
+    name: "Technical Support Engineer II"
+    title_keywords:
+      - "Technical Support Engineer"
+      - "IT Support Engineer"
+      - "Systems Administrator"
+      - "IT Infrastructure Engineer"
+      - "Level II Technical Support"
     keywords:
-      - "data engineering"
-      - "ETL pipeline"
-      - "Pandas"
-      - "SQL"
-      - "Apache Airflow"
-      - "data analytics"
-      - "BigQuery"
+      - "technical support"
+      - "IT support"
+      - "enterprise networking"
+      - "systems administrator"
+      - "troubleshooting"
+      - "SLA"
     must_have:
-      - "SQL (PostgreSQL or BigQuery)"
-      - "Python data processing (Pandas, Polars)"
-      - "ETL/ELT pipeline design"
+      - "technical support or IT support or systems administration"
+      - "networking or server or infrastructure"
     nice_to_have:
-      - "Apache Airflow or Prefect"
-      - "dbt"
-      - "AI/ML feature engineering"
-    location_preference: hybrid_preferred
+      - "Python automation or scripting"
+      - "Linux or Windows server"
+      - "HIPAA or security compliance"
+      - "documentation or knowledge base"
+      - "firewall or VPN or Active Directory"
+    location_preference: "remote"
+    employment_types: ["full-time", "contract"]
+    min_salary: 60000
+    rate_min_hourly: 30
+
+  federal-contracts:
+    name: "Federal IT Contractor (BADGRTechnologies LLC)"
+    title_keywords:
+      - "Software Engineer"
+      - "AI Developer"
+      - "Systems Engineer"
+      - "IT Specialist"
+      - "Data Engineer"
+      - "Python Developer"
+    keywords:
+      - "federal"
+      - "government"
+      - "clearance"
+      - "NAICS 541511"
+      - "IT contractor"
+      - "AI systems"
+    must_have:
+      - "Python or AI or software engineering or IT"
+      - "federal or government or agency or department"
+    nice_to_have:
+      - "clearance eligible or public trust"
+      - "AWS GovCloud or FedRAMP"
+      - "HIPAA or FISMA or compliance"
+      - "remote work authorized"
+    location_preference: "remote"
+    employment_types: ["full-time", "contract"]
+    min_salary: 80000
+    rate_min_hourly: 45
+    notes: "Use BADGRTechnologies LLC — UEI U9GUGKVFGCA9, NAICS 541511, DUNS 136411582"
+
+  workmarket-contractor:
+    name: "Freelance IT & AI Contractor"
+    title_keywords:
+      - "IT Contractor"
+      - "AI Developer"
+      - "Python Freelancer"
+      - "Automation Specialist"
+      - "Technical Consultant"
+    keywords:
+      - "freelance"
+      - "contractor"
+      - "gig"
+      - "remote work"
+      - "AI automation"
+      - "IT consulting"
+      - "Python"
+    must_have:
+      - "remote or contract or freelance or consulting"
+      - "Python or AI or IT or technical"
+    nice_to_have:
+      - "hourly rate or 1099 or corp-to-corp"
+      - "short-term or project-based"
+      - "automation or scripting or integration"
+    location_preference: "remote"
+    employment_types: ["contract", "gig", "part-time"]
+    min_salary: 0
+    rate_min_hourly: 35
+    notes: "WorkMarket primary platform — $35/hr minimum"

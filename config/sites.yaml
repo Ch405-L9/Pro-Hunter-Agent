@@ -17,7 +17,7 @@ sites:
   dice:
     name: "Dice"
     search_url: "https://www.dice.com/jobs?q={keywords}&radius=30&radiusUnit=mi&page=1&pageSize=20&filters.postedDate=ONE&filters.workplaceTypes=Remote&language=en"
-    strategy_tiers: ["local", "firecrawl_self_hosted"]
+    strategy_tiers: ["local", "firecrawl_self_hosted", "firecrawl_cloud", "browseruse"]
 
   sam_gov:
     name: "SAM.gov (Federal Contracts)"
@@ -33,4 +33,34 @@ sites:
   remote_ok:
     name: "RemoteOK"
     search_url: "https://remoteok.com/remote-{keywords}-jobs"
-    strategy_tiers: ["local", "firecrawl_self_hosted"]
+    strategy_tiers: ["local", "firecrawl_self_hosted", "firecrawl_cloud", "browseruse"]
+
+  workmarket:
+    name: "WorkMarket (Primary Contractor Platform)"
+    search_url: "https://www.workmarket.com/feed"
+    job_url: "https://www.workmarket.com/assignments"
+    strategy_tiers: ["browseruse", "agenty"]
+    requires_auth: true
+    credential_key: "workmarket"
+    notes: "WM Primary — requires login. Use browseruse with stored creds."
+
+  ziprecruiter:
+    name: "ZipRecruiter"
+    search_url: "https://www.ziprecruiter.com/candidate/search?search={keywords}&location=Remote"
+    strategy_tiers: ["local", "firecrawl_self_hosted", "firecrawl_cloud", "browseruse"]
+    credential_key: "ziprecruiter"
+    notes: "Gmail account — Google auth, may need manual session"
+
+  indeed_proton:
+    name: "Indeed (antgrant4781@proton.me)"
+    search_url: "https://www.indeed.com/jobs?q={keywords}&l=Remote&remotejob=032b3046-06a3-4876-8dfd-474eb5e7ed11"
+    strategy_tiers: ["local", "firecrawl_self_hosted", "firecrawl_cloud", "browseruse"]
+    credential_key: "indeed_proton"
+    notes: "USER1 proton account"
+
+  indeed_gmail:
+    name: "Indeed (antgrant4781@gmail.com)"
+    search_url: "https://www.indeed.com/jobs?q={keywords}&l=Remote&remotejob=032b3046-06a3-4876-8dfd-474eb5e7ed11"
+    strategy_tiers: ["local", "firecrawl_self_hosted", "firecrawl_cloud", "browseruse"]
+    credential_key: "indeed_gmail"
+    notes: "USER2 Gmail account — Google auth, pre-configured for remote tech/IT roles, $35/hr min"

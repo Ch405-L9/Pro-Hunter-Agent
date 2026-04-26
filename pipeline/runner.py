@@ -16,7 +16,7 @@ class JobOpsPipeline:
     def __init__(self, config_dir: Path = None):
         cfg_dir = Path(config_dir) if config_dir else _CONFIG_DIR
         self.configs = self._load_configs(cfg_dir)
-        prov = self.configs["providers"]
+        prov = self.configs["providers"].get("providers", self.configs["providers"])
         llm_cfg = prov.get("llm", {})
 
         self.strategy = ScrapingStrategy(prov)
