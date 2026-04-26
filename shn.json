@@ -1,89 +1,126 @@
 {
   "document_type": "Claude Code handoff",
   "document_name": "shn.json",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "created_for": "Claude Code",
-  "created_date": "2026-04-26",
+  "last_updated": "2026-04-26",
   "project": {
     "name": "Pro Hunter Agent",
     "canonical_path": "/home/t0n34781/projects/pro_hunter",
     "github_repo": "https://github.com/Ch405-L9/Pro-Hunter-Agent.git",
     "owner": "Brandon Anthony Grant",
+    "preferred_name": "Anthony Grant",
     "business": "BADGRTechnologies LLC",
     "uei": "U9GUGKVFGCA9",
-    "duplicate_copy": "/home/t0n34781/projects/badgr_harness/pro_hunter — stale, not maintained, do not use"
+    "duns": "136411582",
+    "ein": "33-3212015",
+    "naics": "541511",
+    "duplicate_copy": "/home/t0n34781/projects/badgr_harness/pro_hunter — stale, do not use"
   },
   "build_focus": {
-    "primary_goal": "AI-assisted job search and application system: scrape job postings from multiple sources, score against skill profiles using local LLMs, track in CSV CRM, automate form filling, and integrate with badgr_harness via MCP and RAG.",
+    "primary_goal": "AI-assisted job search and application: scrape postings, score against skill profiles using local LLMs, track in CSV, automate form filling, integrate with badgr_harness via MCP and RAG.",
     "secondary_goals": [
-      "Local-first LLM usage — Ollama models handle all parsing, scoring, and browser automation. Cloud models are last-resort fallback only.",
-      "Tiered scraping fallback to handle anti-bot protections without relying on expensive cloud scrapers by default.",
-      "Seamless integration with badgr_harness: jobs indexed into ChromaDB job_opportunities collection; MCP server exposes job tools to Claude.",
-      "Production-ready: proper Python package structure, config-driven, cron-schedulable, fully logged."
+      "Local-first LLM — Ollama handles all parse, score, browser automation. Cloud last-resort only.",
+      "Tiered scraping fallback: local Playwright → Firecrawl self-hosted → Firecrawl cloud → BrowserUse → Agenty.",
+      "Jobs indexed into ChromaDB job_opportunities collection in badgr_harness RAG.",
+      "MCP stdio server exposes job tools to Claude in badgr_harness sessions.",
+      "Production-ready: package structure, config-driven, cron-schedulable, logged."
     ]
   },
   "environment": {
     "os": "Ubuntu 24.04.4 LTS",
-    "hardware": "AMD Ryzen 5 5500, 16GB RAM, AMD RX 6500 XT",
+    "hardware": "AMD Ryzen 5 5500, 16GB RAM, AMD RX 6500 XT (GPU not used for inference)",
     "python": "3.10+",
+    "venv": "/home/t0n34781/projects/pro_hunter/.venv",
     "ollama_models_available": [
-      "nomic-embed-text:latest",
-      "qwen2.5:14b",
-      "qwen2.5-coder:7b",
-      "mistral:7b",
-      "llama3.1:8b",
-      "llama3.2:latest",
-      "phi3:mini",
-      "gemma2:2b",
+      "mistral:7b (4.4GB) — PRIMARY parse/score model",
+      "nomic-embed-text:latest (0.3GB) — embeddings",
+      "llama3.2:latest (2.0GB)",
+      "llama3.2:3b (2.0GB)",
+      "phi3:mini (2.2GB)",
+      "gemma2:2b (1.6GB)",
+      "qwen2.5-coder:7b (4.7GB)",
+      "qwen2.5:14b (9.0GB) — DO NOT USE for pipeline (too large for 16GB RAM)",
       "badgr-analyst:latest"
     ],
-    "default_scoring_model": "qwen2.5:14b",
-    "embed_model": "nomic-embed-text"
+    "active_models": {
+      "parse_model": "mistral:7b",
+      "scoring_model": "mistral:7b",
+      "embed_model": "nomic-embed-text",
+      "browseruse_model": "llama3.2:latest"
+    },
+    "cpu_inference_notes": "mistral:7b: ~6s load, ~78s parse (2000 chars), ~26s score. Total pipeline ~107s. Do NOT run qwen2.5:14b in pipeline — 300s+ timeout on CPU with 6000-char prompts."
   },
   "package_structure": {
     "scrapers": {
       "path": "scrapers/",
-      "modules": ["base.py", "strategy.py", "local_playwright.py", "firecrawl_client.py", "browseruse_client.py", "agenty_client.py"],
-      "purpose": "Multi-tiered web scraping with automatic fallback. Tier order: local -> firecrawl_self_hosted -> firecrawl_cloud -> browseruse -> agenty."
+      "modules": ["__init__.py", "base.py", "strategy.py", "local_playwright.py", "firecrawl_client.py", "browseruse_client.py", "agenty_client.py"],
+      "purpose": "Multi-tiered scraping with automatic fallback. Tier order per site in config/sites.yaml."
     },
     "parsers": {
       "path": "parsers/",
-      "modules": ["job_parser.py", "form_parser.py"],
-      "purpose": "LLM-based extraction of job fields from raw HTML/markdown. Regex fallback when LLM unavailable."
+      "modules": ["__init__.py", "job_parser.py", "form_parser.py"],
+      "purpose": "LLM extraction (2000-char snippet) with regex fallback. SHA-256 stable job IDs."
     },
     "llm": {
       "path": "llm/",
-      "modules": ["client_ollama.py", "client_cloud.py", "scoring.py", "resume_customizer.py"],
-      "purpose": "Local Ollama client wrapper, cloud fallback, fit scoring against skill profiles, resume and cover letter generation."
+      "modules": ["__init__.py", "client_ollama.py", "client_cloud.py", "scoring.py", "resume_customizer.py"],
+      "purpose": "Async Ollama wrapper, fit scoring, resume/cover letter generation."
     },
     "pipeline": {
       "path": "pipeline/",
-      "modules": ["runner.py", "collector.py", "scheduler.py"],
-      "purpose": "End-to-end orchestration. runner.py is the main pipeline. collector.py builds search URLs. scheduler.py is cron-ready daily runner."
+      "modules": ["__init__.py", "runner.py", "collector.py", "scheduler.py"],
+      "purpose": "Orchestration: runner.py is the main pipeline. collector.py builds search URLs. scheduler.py is cron-ready."
     },
     "storage": {
       "path": "storage/",
-      "modules": ["csv_io.py"],
-      "purpose": "50-field CRM CSV with dedup-by-job_id and workflow status tracking."
+      "modules": ["__init__.py", "csv_io.py"],
+      "purpose": "50-field CRM CSV. Dedup by job_id. Workflow status tracking."
     },
     "cli": {
       "path": "cli/",
-      "modules": ["main.py"],
-      "purpose": "CLI commands: collect-score, apply, query, list, run-daily."
+      "modules": ["__init__.py", "main.py"],
+      "purpose": "Entry: collect-score, apply, query, list, run-daily."
     },
     "config": {
       "path": "config/",
       "files": {
-        "sites.yaml": "7 job sites with per-site scraping strategy tiers",
-        "providers.yaml": "API keys (env var refs), Ollama config, scraping tier order, call quotas",
-        "skills.yaml": "8 skill profiles: python-automation, ai-systems, federal-contracts, web-dev, ai-agents, devops-mlops, content-tech, data-engineering",
-        "identity.yaml": "Brandon Anthony Grant / BADGRTechnologies LLC / UEI U9GUGKVFGCA9 — CAGE code is placeholder"
+        "sites.yaml": "11 job sites with per-site scraping strategy tiers and credential keys",
+        "providers.yaml": "Scraping tier order, Ollama config (mistral:7b), API quotas",
+        "skills.yaml": "9 skill profiles: ai-sw-engineer (primary), python-automation, full-stack-dev, ai-agents, devops-mlops, field-support-engineer, tech-support, federal-contracts, workmarket-contractor",
+        "identity.yaml": "LOCAL ONLY — gitignored. Full identity, business data, platform credentials. Do not read or commit."
       }
     },
     "integration_modules": {
-      "mcp_server.py": "MCP stdio server. Tools: job_search, job_query, job_apply, list_jobs, ingest_jobs_to_rag.",
-      "rag_bridge.py": "Feeds jobs into badgr_harness ChromaDB at rag_db/. Collection: job_opportunities. Separate from badgr_corpus.",
-      "form_filler.py": "Browser form automation using BrowserUse + langchain-ollama. Always dry-run by default."
+      "mcp_server.py": "MCP stdio JSON-RPC server. Tools: job_search, job_query, job_apply, list_jobs, ingest_jobs_to_rag.",
+      "rag_bridge.py": "Feeds jobs into badgr_harness ChromaDB. Collection: job_opportunities. Separate from badgr_corpus.",
+      "form_filler.py": "BrowserUse + ChatOllama. Always dry_run=True by default. Pass dry_run=False to submit."
+    }
+  },
+  "config_read_pattern": {
+    "warning": "CRITICAL — do not regress this fix.",
+    "bug_history": "providers.yaml top-level key is 'providers', so yaml.safe_load returns {'providers': {...}}. configs['providers'] = this dict. prov.get('llm', {}) = {} because the key is 'providers', not 'llm'.",
+    "correct_pattern": "prov = self.configs['providers'].get('providers', self.configs['providers']); llm_cfg = prov.get('llm', {})"
+  },
+  "job_sites": {
+    "active_authenticated": ["linkedin", "workmarket (PRIMARY)", "ziprecruiter", "indeed_proton", "indeed_gmail"],
+    "active_public": ["usajobs", "remote_ok", "dice", "wellfound", "sam_gov"],
+    "workmarket_note": "PRIMARY contractor platform. Requires browseruse with stored credentials from identity.yaml.",
+    "indeed_note": "Two accounts: proton.me (USER1) and gmail (USER2 with pre-configured remote/tech search)."
+  },
+  "skill_profiles": {
+    "primary": "ai-sw-engineer",
+    "all": ["ai-sw-engineer", "python-automation", "full-stack-dev", "ai-agents", "devops-mlops", "field-support-engineer", "tech-support", "federal-contracts", "workmarket-contractor"],
+    "salary_floors": {
+      "ai-sw-engineer": "$85k / $45/hr",
+      "ai-agents": "$90k / $50/hr",
+      "devops-mlops": "$85k / $45/hr",
+      "python-automation": "$80k / $40/hr",
+      "full-stack-dev": "$80k / $40/hr",
+      "field-support-engineer": "$75k / $38/hr",
+      "tech-support": "$60k / $30/hr",
+      "federal-contracts": "$80k / $45/hr (via BADGRTech LLC)",
+      "workmarket-contractor": "$35/hr minimum"
     }
   },
   "badgr_harness_integration": {
@@ -91,129 +128,123 @@
     "mcp_server_command": "/home/t0n34781/projects/pro_hunter/.venv/bin/python /home/t0n34781/projects/pro_hunter/mcp_server.py",
     "rag_db_path": "/home/t0n34781/projects/badgr_harness/rag_db/",
     "rag_collection": "job_opportunities",
+    "rag_collection_count": "1 doc (as of 2026-04-26, grows with each pipeline run)",
+    "badgr_corpus_count": "2087 docs (AI/tech reference corpus, do not modify)",
     "embed_model": "nomic-embed-text (same as badgr_corpus)",
-    "note": "job_opportunities is a separate ChromaDB collection from badgr_corpus. Do not merge. Different metadata schemas."
+    "metadata_schema": {
+      "job_id": "string — 16-char SHA-256 of job URL",
+      "job_title": "string",
+      "company": "string (empty string if null)",
+      "source_site": "string",
+      "location_type": "string — remote/hybrid/onsite/empty",
+      "tech_stack": "pipe-separated string e.g. Python|Docker|AWS",
+      "fit_score": "string — integer 0-100",
+      "skill_profile": "string — profile key"
+    }
   },
-  "worker_delegation_pattern": {
-    "claude": "Architecture decisions, import/dependency correctness, integration logic, final verification",
-    "qwen2.5-coder:7b": "Code boilerplate, config YAML generation, test templates",
-    "qwen2.5:14b": "Job scoring, job parsing, resume customization, complex reasoning",
-    "mistral:7b": "Documentation prose, RAG content, skill profile content (review output — tends to be generic)",
-    "nomic-embed-text": "Vector embeddings for ChromaDB ingestion"
+  "worker_delegation": {
+    "claude": "Architecture decisions, integration correctness, final verification",
+    "mistral:7b": "Job parsing (2000-char), fit scoring, documentation prose",
+    "llama3.2:latest": "BrowserUse LLM driver for authenticated scraping",
+    "nomic-embed-text": "Vector embeddings for ChromaDB",
+    "qwen2.5-coder:7b": "Code generation tasks if needed (not in pipeline)",
+    "AVOID qwen2.5:14b": "Too large for 16GB RAM — 300s+ timeouts on any substantial prompt"
   },
   "current_state": {
-    "build_status": "v1.0.0 complete",
-    "all_imports_verified": true,
-    "all_core_tests_pass": true,
-    "venv_status": "created — pip install and playwright install required before first run",
-    "git_status": "initial commit pushed to github.com/Ch405-L9/Pro-Hunter-Agent",
+    "version": "v1.1.0",
+    "build_status": "working — first successful E2E run completed 2026-04-26",
+    "pipeline_verified": true,
+    "llm_parse_working": true,
+    "llm_score_working": true,
+    "rag_bridge_working": true,
+    "csv_save_working": true,
     "mcp_server_registered": true,
-    "rag_bridge_wired": true,
-    "first_live_run_status": "not yet executed — URL typo in first test (remmoteok.com instead of remoteok.com)"
+    "identity_yaml_gitignored": true,
+    "git_pushed": true
   },
   "known_issues": [
     {
       "id": "KI-001",
-      "severity": "none",
-      "description": "First test run used URL 'remmoteok.com' (double m). DNS resolution failed as expected. Not a bug.",
-      "resolution": "Use correct URL: https://remoteok.com/remote-python-jobs"
+      "severity": "low",
+      "description": "identity.yaml CAGE code is empty string. CAGE code not yet obtained.",
+      "resolution": "Register on SAM.gov, obtain CAGE, update config/identity.yaml cage_code field."
     },
     {
       "id": "KI-002",
       "severity": "low",
-      "description": "identity.yaml CAGE code is placeholder string 'YOUR_CAGE'.",
-      "resolution": "Update config/identity.yaml cage_code field when CAGE code is obtained."
+      "description": "Firecrawl self-hosted (localhost:3002) not deployed. Tier skipped gracefully.",
+      "resolution": "Deploy via docker-compose from github.com/mendableai/firecrawl (not single image pull — requires docker-compose.yaml)."
     },
     {
       "id": "KI-003",
       "severity": "low",
-      "description": "providers.yaml API keys use ${VAR_NAME} placeholders for Firecrawl and Agenty. These tiers will fail without real keys.",
-      "resolution": "Set FIRECRAWL_API_KEY and AGENTY_API_KEY env vars, or edit providers.yaml directly. Tier 0 (local Playwright) works without any keys."
+      "description": "FIRECRAWL_API_KEY and AGENTY_API_KEY not set. Cloud tiers fail gracefully.",
+      "resolution": "Set env vars or inject into providers.yaml directly."
     },
     {
       "id": "KI-004",
-      "severity": "low",
-      "description": "Firecrawl self-hosted at localhost:3002 not yet deployed.",
-      "resolution": "Run Firecrawl via Docker: docker run -p 3002:3002 ghcr.io/mendableai/firecrawl"
+      "severity": "medium",
+      "description": "WorkMarket, LinkedIn, ZipRecruiter, Indeed require authenticated browser sessions. BrowserUse not yet tested with login flows.",
+      "resolution": "Test browseruse tier with stored credentials from identity.yaml. May need session cookie persistence."
     },
     {
       "id": "KI-005",
-      "severity": "medium",
-      "description": "badgr_harness/.claude/settings.local.json is root-owned. Cannot write project-level settings there.",
-      "resolution": "MCP registration handled via .mcp.json at badgr_harness root instead. This is the correct approach."
+      "severity": "low",
+      "description": "ZipRecruiter and Indeed (gmail) use Google auth — password not stored, must use saved browser session.",
+      "resolution": "Use browseruse with a pre-logged-in Chromium profile, or set up session cookie persistence."
+    },
+    {
+      "id": "KI-006",
+      "severity": "info",
+      "description": "Ollama request queue: killing Python mid-run leaves orphaned in-flight requests that block subsequent calls.",
+      "resolution": "Force-unload models via keep_alive:0 API call. If stuck, restart Ollama service (requires sudo)."
     }
   ],
   "next_steps": [
     {
       "priority": 1,
-      "action": "Install dependencies and verify live scrape",
+      "action": "Run daily collection across primary profiles",
       "commands": [
         "cd /home/t0n34781/projects/pro_hunter",
-        "source .venv/bin/activate",
-        "python -m cli.main collect-score --url 'https://remoteok.com/remote-python-jobs' --site remote_ok --profile python-automation"
-      ],
-      "notes": "Tier 0 (local Playwright) should work without API keys. Verify job is written to data/jobs.csv."
-    },
-    {
-      "priority": 2,
-      "action": "Run first daily collection across priority profiles",
-      "commands": [
-        "python -m cli.main run-daily --profiles ai-agents,python-automation,federal-contracts"
-      ],
-      "notes": "Runs all sites for each profile. Rate-limited to 2s between jobs. Expect some sites to fail on Tier 0 and escalate."
-    },
-    {
-      "priority": 3,
-      "action": "Ingest collected jobs into badgr_harness RAG",
-      "commands": [
-        "python -m cli.main list --min-score 0",
-        "python -c \"import asyncio; sys.path.insert(0, '.'); from mcp_server import handle_tool; asyncio.run(handle_tool('ingest_jobs_to_rag', {}))\""
-      ],
-      "notes": "Pushes all CSV jobs to ChromaDB job_opportunities collection. Run after each daily collection."
-    },
-    {
-      "priority": 4,
-      "action": "Set up cron for daily automated runs",
-      "commands": [
-        "crontab -e",
-        "# Add: 0 8 * * * cd /home/t0n34781/projects/pro_hunter && .venv/bin/python -m cli.main run-daily >> logs/daily.log 2>&1"
+        ".venv/bin/python -m cli.main run-daily --profiles ai-sw-engineer,python-automation,ai-agents,workmarket-contractor"
       ]
     },
     {
+      "priority": 2,
+      "action": "Test WorkMarket authenticated scrape",
+      "notes": "BrowserUse tier with workmarket credentials from identity.yaml. Verify job listings are scraped and scored."
+    },
+    {
+      "priority": 3,
+      "action": "Set up cron for daily automated runs",
+      "commands": [
+        "crontab -e",
+        "0 8 * * * .venv/bin/python -m cli.main run-daily >> logs/daily.log 2>&1"
+      ]
+    },
+    {
+      "priority": 4,
+      "action": "Deploy Firecrawl self-hosted",
+      "notes": "Clone github.com/mendableai/firecrawl, run docker-compose up. Enables faster Tier 1 scraping."
+    },
+    {
       "priority": 5,
-      "action": "Update CAGE code",
-      "file": "config/identity.yaml",
-      "field": "identity.business.cage_code",
-      "notes": "Replace 'YOUR_CAGE' with actual CAGE code when obtained from SAM.gov."
+      "action": "Test MCP server from badgr_harness Claude session",
+      "notes": "Open Claude Code in badgr_harness. .mcp.json registers pro-hunter automatically. Use job_search, job_query tools."
     },
     {
       "priority": 6,
-      "action": "Deploy self-hosted Firecrawl for Tier 1 scraping",
-      "commands": [
-        "docker run -p 3002:3002 ghcr.io/mendableai/firecrawl"
-      ],
-      "notes": "Enables faster, cheaper scraping for sites that block local Playwright. Runs at localhost:3002 as configured in providers.yaml."
-    },
-    {
-      "priority": 7,
-      "action": "Test MCP server in badgr_harness Claude Code session",
-      "notes": "Open Claude Code in /home/t0n34781/projects/badgr_harness. The .mcp.json should auto-register the pro-hunter MCP server. Use job_search, job_query tools directly from Claude."
-    },
-    {
-      "priority": 8,
-      "action": "Add SAM.gov adapter for federal contracting opportunities",
-      "notes": "sam_gov site already in config/sites.yaml. Add sam_gov_adapter.py in scrapers/ to handle SAM.gov-specific pagination and field extraction. High value for UEI/federal-contracts profile."
+      "action": "Obtain CAGE code and update identity.yaml",
+      "notes": "SAM.gov registration. Required for federal contract bidding under BADGRTechnologies LLC."
     }
   ],
-  "file_layout_quick_ref": {
-    "entry_point": "python -m cli.main",
-    "config": "config/",
-    "data_output": "data/jobs.csv",
-    "logs": "logs/",
-    "tests": "tests/test_core.py",
-    "mcp_server": "mcp_server.py",
-    "rag_bridge": "rag_bridge.py",
-    "requirements": "requirements.txt",
-    "setup": "setup.py"
+  "quick_commands": {
+    "single_job": ".venv/bin/python -m cli.main collect-score --url URL --site SITE_KEY --profile PROFILE_KEY",
+    "daily_all": ".venv/bin/python -m cli.main run-daily",
+    "daily_profiles": ".venv/bin/python -m cli.main run-daily --profiles ai-sw-engineer,python-automation",
+    "list_jobs": ".venv/bin/python -m cli.main list --min-score 60",
+    "query_rag": ".venv/bin/python -m cli.main query --text 'Python AI engineer remote' --k 5",
+    "unload_model": "curl -s -X POST http://localhost:11434/api/generate -d '{\"model\":\"MODEL_NAME\",\"keep_alive\":0}'",
+    "check_queue": "curl -s http://localhost:11434/api/ps | python3 -c \"import sys,json; [print(m['name']) for m in json.load(sys.stdin).get('models',[])]\" "
   }
 }

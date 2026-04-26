@@ -94,6 +94,18 @@ TOOLS = [
         "description": "Push all jobs from the CRM CSV into the badgr_harness RAG job_opportunities collection.",
         "inputSchema": {"type": "object", "properties": {}},
     },
+    {
+        "name": "query_corpus",
+        "description": "Semantic search over badgr_corpus (2087 AI/tech reference docs). Use to get background context on a technology, pattern, or topic.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Natural language search query"},
+                "k": {"type": "integer", "description": "Number of results (default 3)", "default": 3},
+            },
+            "required": ["query"],
+        },
+    },
 ]
 
 
@@ -169,6 +181,29 @@ async def handle_tool(name: str, args: dict) -> dict:
             await push_job_to_rag(job, fit)
             count += 1
         return {"ingested": count}
+
+    elif name == "query_corpus":
+        try:
+            import chromadb
+            BADGR_RAG = Path(__file__).resolve().parent.parent / "badgr_harness" / "rag_db"
+            c = chromadb.PersistentClient(path=str(BADGR_RAG))
+            col = c.get_collection("badgr_corpus")
+            k = min(args.get("k", 3), col.count())
+            results = col.query(query_texts=[args["query"]], n_results=k)
+            hits = []
+            for doc, meta, dist in zip(
+                results["documents"][0], results["metadatas"][0], results["distances"][0]
+            ):
+                hits.append({
+                    "source": meta.get("source", ""),
+                    "topic": meta.get("topic", ""),
+                    "relevance": meta.get("relevance", ""),
+                    "distance": round(dist, 4),
+                    "excerpt": doc[:300],
+                })
+            return {"results": hits, "count": len(hits)}
+        except Exception as e:
+            return {"error": f"Corpus query failed: {e}"}
 
     return {"error": f"Unknown tool: {name}"}
 
